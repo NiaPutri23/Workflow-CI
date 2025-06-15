@@ -1,0 +1,39 @@
+name: Train Model with MLflow
+
+on:
+  push:
+    paths:
+      - MLProject/**
+  workflow_dispatch:
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        auto-activate-base: false
+        environment-file: MLProject/conda.yaml
+        activate-environment: travel-insurance-env
+
+    - name: Install MLflow
+      run: |
+        pip install mlflow
+
+    - name: Run MLflow Project
+      run: |
+        cd MLProject
+        mlflow run . --no-conda
+
+    - name: Login to Docker Hub
+      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Build and Push Docker Image
+      run: |
+        mlflow models build-docker -m MLProject/trained_model.pkl -n <username_docker>/<nama_image>
+        docker push <username_docker>/<nama_image>

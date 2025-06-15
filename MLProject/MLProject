@@ -1,0 +1,10 @@
+name: travel-insurance-project
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    command: "python modelling.py"
+
+docker_env:
+  image: <username_docker>/<nama_image>:latest
