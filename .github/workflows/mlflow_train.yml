@@ -30,13 +30,13 @@ jobs:
         mlflow run . --no-conda || echo "MLflow failed"
 
     - name: Upload Model Artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: trained-model
         path: MLProject/trained_model.pkl
 
     - name: Upload MLflow logs
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: mlruns
         path: mlruns/
