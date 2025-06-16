@@ -6,8 +6,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import joblib 
 
-# Inisialisasi tracking MLflow DagsHub
-mlflow.set_tracking_uri("http://127.0.0.1:5000")
 mlflow.set_experiment("travel_insurance_experiment")
 
 # Gunakan autolog
@@ -28,11 +26,6 @@ with mlflow.start_run():
     y_pred = model.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
     print(f"Accuracy: {acc}")
-    
-    # Simpan model
-    output_path = "trained_model.pkl"
-    joblib.dump(model, output_path)
 
-    # Log model sebagai artifact
-    mlflow.log_artifact(output_path)
     mlflow.log_metric("accuracy_manual", acc)
+    mlflow.sklearn.log_model(model, "model")

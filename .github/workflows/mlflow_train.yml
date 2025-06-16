@@ -22,18 +22,23 @@ jobs:
         activate-environment: travel-insurance-env
 
     - name: Install MLflow
-      run: |
-        pip install mlflow
+      run: pip install mlflow
 
     - name: Run MLflow Project
       run: |
         cd MLProject
         mlflow run . --no-conda
 
+    - name: Upload MLflow model artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: mlflow-model
+        path: MLProject/model
+
     - name: Login to Docker Hub
       run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
     - name: Build and Push Docker Image
       run: |
-        mlflow models build-docker -m MLProject/trained_model.pkl -n <username_docker>/<nama_image>
-        docker push <username_docker>/<nama_image>
+        mlflow models build-docker -m MLProject/model -n NiaPutri23/travel-insurance
+        docker push NiaPutri23/travel-insurance
