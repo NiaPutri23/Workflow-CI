@@ -28,6 +28,7 @@ with mlflow.start_run():
     print(f"Accuracy: {acc}")
 
     joblib.dump(model, "trained_model.pkl")
+    mlflow.log_artifact("trained_model.pkl")
 
     mlflow.log_metric("accuracy_manual", acc)
     mlflow.sklearn.log_model(model, "model")
