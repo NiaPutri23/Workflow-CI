@@ -18,22 +18,23 @@ def main(data_path):
 
     mlflow.set_experiment("travel_insurance_experiment")
 
-    # Gunakan autolog
+    # Aktifkan autolog (ini sudah cukup tanpa perlu start_run manual)
     mlflow.sklearn.autolog()
 
-    with mlflow.start_run():
-        model = RandomForestClassifier()
-        model.fit(X_train, y_train)
+    # Training model
+    model = RandomForestClassifier()
+    model.fit(X_train, y_train)
 
-        y_pred = model.predict(X_test)
-        acc = accuracy_score(y_test, y_pred)
-        print(f"Accuracy: {acc}")
+    y_pred = model.predict(X_test)
+    acc = accuracy_score(y_test, y_pred)
+    print(f"Accuracy: {acc}")
 
-        joblib.dump(model, "trained_model.pkl")
-        mlflow.log_artifact("trained_model.pkl")
+    # Simpan dan log model
+    joblib.dump(model, "trained_model.pkl")
+    mlflow.log_artifact("trained_model.pkl")
 
-        mlflow.log_metric("accuracy_manual", acc)
-        mlflow.sklearn.log_model(model, "model")
+    mlflow.log_metric("accuracy_manual", acc)
+    mlflow.sklearn.log_model(model, "model")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
