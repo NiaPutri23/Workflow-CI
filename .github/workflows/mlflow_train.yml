@@ -25,6 +25,7 @@ jobs:
       run: pip install mlflow
 
     - name: Run MLproject
+      working-directory: MLProject
       run: mlflow run . --env-manager=local
 
     - name: Upload Model Artifact
